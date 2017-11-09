@@ -1,10 +1,15 @@
 const express = require('express');
 const path = require('path');
+const http = require('http');
 const publicPath = path.join(__dirname, '../public' )
+const socketIO = require('socket.io');
 const fs = require('fs');
 
 const port = process.env.PORT || 8080;
+
 var app = express();
+var server = http.createServer(app);
+var io = socketIO(server);
 
 app.use('/', (req, res, next) => {
   var visitLog = [
@@ -13,8 +18,7 @@ app.use('/', (req, res, next) => {
     req.url,
     req.ip
   ].join(' ');
-  fs.appendFile('server.log', visitLog + '\n', (err) => {
-    console.log('success');
+  fs.appendFile(' server.log', visitLog + '\n', (err) => {
     if (err) {
       console.log('Unable to log the user!');
     }
@@ -23,11 +27,14 @@ app.use('/', (req, res, next) => {
 });
 app.use(express.static(publicPath));
 
-
-app.get('/', (req, res) => {
-
+io.on('connection', function(socket){
+  console.log('A user connected');
+  socket.on('disconnect', function(){
+    console.log('User disconnected');
+  });
 });
 
-app.listen(port, () => {
-  console.log(`Starting listening on port 8080...`);
+
+server.listen(port, () => {
+  console.log(`Servr is on port 8080...`);
 });

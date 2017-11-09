@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html>
+  <title>Socket.IO chat</title>
   <head>
     <meta charset="utf-8">
     <title></title>
   </head>
   <body>
-    <h1>Express</h1>
+    <h1>Welcome to My Express App</h1>
+    <!doctype html>
+  <body>
+    <script src="/socket.io/socket.io.js"></script>
+      <script>
+        var socket = io();
+        socket.on('connect', () => {
+          console.log('Success!');
+        });
+
+        socket.on('disconnect', () => {
+          console.log('Disconnect!');
+        })
+    </script>
   </body>
 </html>
