@@ -28,7 +28,27 @@ app.use('/', (req, res, next) => {
 app.use(express.static(publicPath));
 
 io.on('connection', function(socket){
-  console.log('A user connected');
+  console.log(`A user connected on ${new Date()}`);
+
+  // socket.emit('newEmail', {
+  //   title: 'Hello cliet',
+  //   from: 'kevinzh@udel.edu'
+  // });
+
+  socket.emit('newMessage', {
+    from: 'Pengcheng',
+    text: 'when can i fuck you?',
+    createdAt: new Date()
+  });
+
+  // socket.on('createEmail', (newEmail) => {
+  //   console.log('createEmail', newEmail);
+  // });
+
+  socket.on('createMessage', (newMessage) => {
+    console.log(newMessage);
+  });
+
   socket.on('disconnect', function(){
     console.log('User disconnected');
   });
