@@ -18,7 +18,7 @@ app.use('/', (req, res, next) => {
     req.url,
     req.ip
   ].join(' ');
-  fs.appendFile(' server.log', visitLog + '\n', (err) => {
+  fs.appendFile('server.log', visitLog + '\n', (err) => {
     if (err) {
       console.log('Unable to log the user!');
     }
@@ -46,7 +46,7 @@ io.on('connection', function(socket){
   // // });
 
   socket.on('createMessage', (newMessage) => {
-    io.emit('newMessage', {
+    socket.broadcast.emit('newMessage', {
       from: newMessage.from,
       text: newMessage.text,
       createdAt: new Date().getTime(),
