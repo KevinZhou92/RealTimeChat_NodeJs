@@ -30,6 +30,39 @@ app.use(express.static(publicPath));
 io.on('connection', function(socket){
   console.log(`A user connected on ${new Date()}`);
 
+
+    socket.emit('newMessage', {
+      text: 'Welcome to the chat room!',
+      from: 'Admin',
+      createdAt: new Date().getTime()
+    });
+    socket.broadcast.emit('newMessage', {
+      from: 'admin',
+      text: 'new user comes'
+    });
+
+  socket.on('createMessage', (newMessage) => {
+    io.emit('newMessage', {
+      from: newMessage.from,
+      text: newMessage.text,
+      createdAt: new Date().getTime()
+    });
+    console.log(newMessage);
+  });
+
+  //   socket.broadcast.emit('newMessage', {
+  //     from: newMessage.from,
+  //     text: newMessage.text,
+  //     createdAt: new Date().getTime()
+  //   });
+  //   console.log(newMessage);
+  // });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+
+
   // socket.emit('newEmail', {
   //   title: 'Hello cliet',
   //   from: 'kevinzh@udel.edu'
@@ -44,28 +77,8 @@ io.on('connection', function(socket){
   // // socket.on('createEmail', (newEmail) => {
   // //   console.log('createEmail', newEmail);
   // // });
-
-  socket.on('createMessage', (newMessage) => {
-    io.emit('newMessage', {
-      from: newMessage.from,
-      text: newMessage.text,
-      createdAt: new Date().getTime(),
-    });
-    console.log(newMessage);
-    });
-
-    socket.broadcast.emit('newMessage', {
-      from: newMessage.from,
-      text: newMessage.text,
-      createdAt: new Date().getTime(),
-    });
-    console.log(newMessage);
-  });
-
-  socket.on('disconnect', function(){
-    console.log('User disconnected');
-  });
 });
+
 
 
 server.listen(port, () => {
