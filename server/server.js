@@ -35,17 +35,22 @@ io.on('connection', function(socket){
   //   from: 'kevinzh@udel.edu'
   // });
 
-  socket.emit('newMessage', {
-    from: 'Pengcheng',
-    text: 'when can i fuck you?',
-    createdAt: new Date()
-  });
-
-  // socket.on('createEmail', (newEmail) => {
-  //   console.log('createEmail', newEmail);
+  // socket.emit('newMessage', {
+  //   from: 'Pengcheng',
+  //   text: 'when can i fuck you?',
+  //   createdAt: new Date()
   // });
+  //
+  // // socket.on('createEmail', (newEmail) => {
+  // //   console.log('createEmail', newEmail);
+  // // });
 
   socket.on('createMessage', (newMessage) => {
+    io.emit('newMessage', {
+      from: newMessage.from,
+      text: newMessage.text,
+      createdAt: new Date().getTime(),
+    });
     console.log(newMessage);
   });
 
