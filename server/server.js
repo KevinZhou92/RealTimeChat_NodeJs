@@ -34,22 +34,20 @@ io.on('connection', function(socket){
 
   socket.broadcast.emit('newMessage', generateMessage('admin', 'New user joined!'));
 
-  socket.on('createMessage', (message) => {
+  socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
     io.emit('newMessage', generateMessage(message.from, message.text));
+    callback();
   });
 
-socket.on('createLocationMessage', (coords) => {
-  io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
-});
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+  });
 
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
-
 });
-
-
 
 server.listen(port, () => {
   console.log(`Servr is on port 8080...`);

@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html>
-  <title>Socket.IO chat</title>
   <head>
+    <title>Socket.IO chat</title>
     <meta charset="utf-8">
-    <title></title>
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
-  <body>
-    <p>Welcome to SocketIO App</p>
-    <ol id="messages">
+  <body class="chat">
+    <div class="chat__sidebar">
+      <h3>People</h3>
+      <div id="users"></div>
+  </div>
+      <div class="chat__main">
+        <ol id="messages" class="chat__messages"></ol>
 
-    </ol>
-    <form id="message-form">
-      <input name="message" type="text" placeholder="Message"/>
-      <button >Send</button>
-    </form>
-    <button id="send-location">Send Location</button>
+        <div class="chat__footer">
+          <form id="message-form">
+            <input name="message" type="text" placeholder="Message" autocomplete="off" autofocus/>
+            <button >Send</button>
+          </form>
+          <button id="send-location">Send Location</button>
+        </div>
+      </div>
+
+
   <body>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/libs/jquery-3.2.1.min.js"></script>

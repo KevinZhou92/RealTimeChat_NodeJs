@@ -25,13 +25,14 @@ socket.on('newLocationMessage', function(message) {
 
 $('#message-form').on('submit', function(e) {
   e.preventDefault();
+
+  var messageTextBox = $('[name=message]');
   socket.emit('createMessage', {
     from: 'User',
-    text: $('[name=message]').val()
-  }, function(data) {
-    console.log(data);
+    text: messageTextBox.val()
+  }, function() {
+    messageTextBox.val('');
   });
-  $('[name=message]').val('');
 });
 
 var locationButton = $('#send-location');
