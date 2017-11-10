@@ -30,45 +30,21 @@ app.use(express.static(publicPath));
 io.on('connection', function(socket){
   console.log(`A user connected on ${new Date()}`);
 
+  socket.emit('newMessage', generateMessage('Welcome to the chat room!', 'Admin'));
 
-    socket.emit('newMessage', generateMessage('Welcome to the chat room!', 'Admin'));
+  socket.broadcast.emit('newMessage', generateMessage('admin', 'New user joined!'));
 
-    socket.broadcast.emit('newMessage', generateMessage('admin', 'New user joined!'));
-
-  socket.on('createMessage', (message) => {
+  socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
     io.emit('newMessage', generateMessage(message.from, message.text,));
+    callback('This from the server.');
   });
 
-
-
-  //   socket.broadcast.emit('newMessage', {
-  //     from: newMessage.from,
-  //     text: newMessage.text,
-  //     createdAt: new Date().getTime()
-  //   });
-  //   console.log(newMessage);
-  // });
 
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
 
-
-  // socket.emit('newEmail', {
-  //   title: 'Hello cliet',
-  //   from: 'kevinzh@udel.edu'
-  // });
-
-  // socket.emit('newMessage', {
-  //   from: 'Pengcheng',
-  //   text: 'when can i fuck you?',
-  //   createdAt: new Date()
-  // });
-  //
-  // // socket.on('createEmail', (newEmail) => {
-  // //   console.log('createEmail', newEmail);
-  // // });
 });
 
 

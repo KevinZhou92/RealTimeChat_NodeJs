@@ -8,11 +8,20 @@ socket.on('disconnect', function() {
   console.log('Disconnect!');
 });
 
-socket.on('newMessage', function(newMessage) {
-  console.log(newMessage);
+socket.on('newMessage', function(message) {
+  console.log(message);
+  var li = $('<li>></li>').text(`${message.from}: ${message.text}`);
+  $('#messages').append(li);
 });
 
-socket.emit('createMessage', {
-  from: 'Li meng',
-  text: 'Tomorrow'
-})
+
+$('#message-form').on('submit', function(e) {
+  e.preventDefault();
+  socket.emit('createMessage', {
+    from: 'User',
+    text: $('[name=message]').val()
+  }, function() {
+
+  });
+  $('[name=message]').val('');
+});
