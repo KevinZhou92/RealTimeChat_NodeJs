@@ -39,6 +39,7 @@ socket.on('stop typing', function(userName) {
   var html = Mustache.render(template, {Info});
   $('#typingInfo').html(html);
 });
+
 function scrollToBottom() {
   // Selectors
   var messages = $('#messages');
@@ -57,7 +58,8 @@ function scrollToBottom() {
 
 socket.on('connect', function() {
   var params = jQuery.deparam(window.location.search);
-
+  params.room = params.room.toLowerCase();
+  params.name = params.name.toLowerCase(); 
   userName = params.name;
   userRoom = params.room;
 
