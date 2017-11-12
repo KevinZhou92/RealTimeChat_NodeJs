@@ -75,4 +75,12 @@ describe('Users', () => {
 
     expect(userList).toEqual(['Jen']);
   });
+
+  it('should remove user by name', () => {
+    var removedUser = users.removeUserByName('Jen', 'React Course');
+    
+    expect(removedUser.name).toBe('Jen');
+    expect(removedUser.id).toBe('2');
+    expect(users.users.length).toBe(2);
+  });
 });

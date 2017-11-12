@@ -1,5 +1,44 @@
 var socket = io();
+var userName;
+var userRoom;
+var typing = false;
+var lastTypingTime;
+var INPUT_INTERVAL = 500; //ms
 
+$('input[name=message]').on('input', function() {
+  typingStatus();
+});
+
+function typingStatus() {
+  var inputBox = $('#message');
+  if (!typing) {
+    typing = true;
+    socket.emit('typing', {userName, userRoom});
+  }
+  lastTypingTime = (new Date()).getTime();
+  setTimeout(function() {
+    var currentTime = (new Date()).getTime();
+    var diff = currentTime - lastTypingTime;
+    if (diff >= INPUT_INTERVAL && typing) {
+      typing = false;
+      socket.emit('stop typing', {userName, userRoom});
+    }
+  }, INPUT_INTERVAL);
+}
+
+socket.on('typing', function(userName) {
+  var template = $('#typing-template').html();
+  var Info =  `${userName} is typing...`;
+  var html = Mustache.render(template, {Info});
+  $('#typingInfo').html(html);
+});
+
+socket.on('stop typing', function(userName) {
+  var template = $('#typing-template').html();
+  var Info = '';
+  var html = Mustache.render(template, {Info});
+  $('#typingInfo').html(html);
+});
 function scrollToBottom() {
   // Selectors
   var messages = $('#messages');
@@ -19,6 +58,9 @@ function scrollToBottom() {
 socket.on('connect', function() {
   var params = jQuery.deparam(window.location.search);
 
+  userName = params.name;
+  userRoom = params.room;
+
   socket.emit('join', params, function(err) {
     if (err) {
       alert(err);
@@ -34,7 +76,7 @@ socket.on('disconnect', function() {
 });
 
 socket.on('updateUserList', function(users) {
-  var ol = $('<ol="center"><ol>');
+  var ol = $('<ol></ol>');
 
   users.forEach(function(user) {
     ol.append($('<li></li>').text(user));
