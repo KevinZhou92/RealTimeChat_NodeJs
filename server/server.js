@@ -182,9 +182,9 @@ io.on('connection', function(socket){
     user.save().then((user) => {
       user.generateAuthToken().then((token) => {
         callback(null, user, token);
-      }).catch((err) => {
-        callback('Unable generate token, please try again!');
-      });
+      })
+    }).catch((err) => {
+      callback(err.message);
     });
   });
   // login
