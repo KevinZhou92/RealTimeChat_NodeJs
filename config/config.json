@@ -1,0 +1,12 @@
+{
+  "test": {
+    "PORT": 8080,
+    "MONGODB_URI": "mongodb://localhost:27017/ChatAppTest",
+    "JWT_SECRET": "dsafdas@3fjhlad1324f1"
+  },
+  "development": {
+    "PORT": 8080,
+    "MONGODB_URI": "mongodb://localhost:27017/ChatApp",
+    "JWT_SECRET": "dafadsqetrq1134*adf"
+  }
+}

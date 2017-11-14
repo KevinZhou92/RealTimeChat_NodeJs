@@ -57,20 +57,27 @@ function scrollToBottom() {
 }
 
 socket.on('connect', function() {
-  var params = jQuery.deparam(window.location.search);
-  params.room = params.room.toLowerCase();
-  params.name = params.name.toLowerCase(); 
-  userName = params.name;
-  userRoom = params.room;
+  var userId = localStorage.getItem('user_id');
+  var userToken = localStorage.getItem('user_token');
+  var roomId = localStorage.getItem('room_id');
+  var roomName = localStorage.getItem('room_name');
+  var displayName = localStorage.getItem('display_name');
 
+   $('#room_name').html(roomName);
+   var params = {
+     roomId,
+     userToken,
+     displayName
+   }
+  // join a room, list all the existing message, show online users;
   socket.emit('join', params, function(err) {
     if (err) {
       alert(err);
-      window.location.href = '/';
-    } else {
-      console.log('No error!');
+      window.location.href = '/index.html';
     }
   });
+  userName = displayName;
+  userRoom = roomId;
 });
 
 socket.on('disconnect', function() {
@@ -125,7 +132,10 @@ $('#message-form').on('submit', function(e) {
   socket.emit('createMessage', {
     from: 'User',
     text: messageTextBox.val()
-  }, function() {
+  }, function(err) {
+    if (err) {
+      alert(err);
+    }
     messageTextBox.val('');
   });
 });
