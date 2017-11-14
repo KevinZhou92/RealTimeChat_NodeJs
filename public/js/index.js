@@ -43,21 +43,6 @@ sign_up.on('click', function() {
   sign_up_form.removeClass('invisible');
 });
 
-// log out
-sign_out.on('click', function() {
-  socket.emit('logout', {
-    token: localStorage.getItem('user_token'),
-  }, function(e) {
-    if (e) {
-      return alert(e);
-    }
-    ls_sign_out();
-    room_form.addClass('invisible');
-    sign_in_form.removeClass('invisible');
-    alert('You have successfuly signed out');
-  });
-});
-
 // submit register information
 sign_up_form.on('submit', function(e) {
   e.preventDefault();
@@ -103,7 +88,21 @@ sign_in_form.on('submit', function(e) {
     }
   });
 });
-
+// log out
+sign_out.on('click', function() {
+  socket.emit('logout', {
+    token: localStorage.getItem('user_token'),
+  }, function(e) {
+    if (e) {
+      return alert(e);
+    }
+    ls_sign_out();
+    room_form.addClass('invisible');
+    sign_in_form.removeClass('invisible');
+    alert('You have successfuly signed out');
+  });
+});
+// switch between forms
 sign_in.on('click', function(e) {
   e.preventDefault();
   sign_in_form.removeClass('invisible');
@@ -116,6 +115,7 @@ room_selector.on('change', function() {
     $('#new-room').show();
   }
 });
+// submit room information
 room_form.on('submit', function(e) {
   e.preventDefault();
 
@@ -153,12 +153,7 @@ room_form.on('submit', function(e) {
   }
   window.location.href = '/chat.html';
 });
-function ls_room_info(roomObject) {
-  localStorage.setItem('display_name', roomObject.displayName);
-  localStorage.setItem('room_id', roomObject._id.toString());
-  localStorage.setItem('room_name', roomObject.name);
-}
-
+// handle room list
 function showRoomForm(userName) {
   var roomList = ['Select a room','Add a new room'];
   var roomObject = [];
@@ -179,6 +174,12 @@ function showRoomForm(userName) {
   jQuery('#userName').html(userName);
   room_form.removeClass('invisible');
 };
+// localStorage
+function ls_room_info(roomObject) {
+  localStorage.setItem('display_name', roomObject.displayName);
+  localStorage.setItem('room_id', roomObject._id.toString());
+  localStorage.setItem('room_name', roomObject.name);
+}
 function ls_sign_in(user, token){
   localStorage.setItem('user_token', token);
   localStorage.setItem('user_name', user.name);

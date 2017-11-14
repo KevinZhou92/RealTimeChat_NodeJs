@@ -45,7 +45,7 @@ io.on('connection', function(socket){
       callback(roomList);
     });
   });
-
+ // join a room, return all history messages
   socket.on('join', (params, callback) => {
     var roomId = params.roomId;
     var userToken = params.userToken;
@@ -156,6 +156,7 @@ io.on('connection', function(socket){
       callback();
     }).catch((err) => callback(err));
   });
+  // verify a user by the token
   socket.on('verifyUserByToken', (token, callback) => {
     User.findByToken(token.token).then((user) =>{
       if (!user) {
@@ -165,7 +166,7 @@ io.on('connection', function(socket){
       callback(err);
     });
   });
-
+  // registeration
   socket.on('registerUser', (userInfo, callback) => {
     var user = new User({
       name: userInfo.userName,
@@ -178,8 +179,6 @@ io.on('connection', function(socket){
         return callback('The email was already registered!');
       }
     });
-    // check name
-
     user.save().then((user) => {
       user.generateAuthToken().then((token) => {
         callback(null, user, token);
@@ -188,7 +187,20 @@ io.on('connection', function(socket){
       });
     });
   });
-
+  // login
+  socket.on('login', (user, callback) => {
+    User.findByCredentials(user.email, user.password).then((user) => {
+      if (!user) {
+        callback('No such User!');
+      }
+      user.generateAuthToken().then((token) => {
+        callback(null, user, token);
+      });
+    }).catch((err) => {
+      callback(err);
+    });
+  });
+  // logout
   socket.on('logout', (tokenObject, callback) => {
     User.findByToken(tokenObject.token).then((user) => {
       if (!user) {
@@ -202,20 +214,7 @@ io.on('connection', function(socket){
       callback();
     });
   });
-
-  socket.on('login', (user, callback) => {
-    User.findByCredentials(user.email, user.password).then((user) => {
-      if (!user) {
-        callback('No such User!');
-      }
-      user.generateAuthToken().then((token) => {
-        callback(null, user, token);
-      });
-    }).catch((err) => {
-      callback(err);
-    });
-  });
-
+  // create a new room
   socket.on('newRoom', (room, callback) => {
     Room.findOne({name: room.roomName}).then((room) => {
       if (room) {
@@ -228,7 +227,7 @@ io.on('connection', function(socket){
       callback(null, room);
     }).catch((e) => callback(err));
   });
-
+  // get a room
   socket.on('getRoom', (room, callback) => {
     Room.findOne({name: room.roomName}).then((room) => {
       if (!room) {
@@ -237,14 +236,12 @@ io.on('connection', function(socket){
       callback(null, room);
     }).catch((err) => callback(err));
   });
-
-  // check typing status
-
+  // remove a user
   socket.on('disconnect', () => {
     var user = usersList.removeUser(socket.id);
     if (user) {
-      io.to(user.room).emit('updateUserList', usersList.getUserList(user.room));
-      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left.`))
+      io.to(user.roomId).emit('updateUserList', usersList.getUserList(user.roomId));
+      io.to(user.roomId).emit('newMessage', generateMessage('Admin', `${user.displayName} has left.`))
     }
     console.log('User disconnected');
   });

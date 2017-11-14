@@ -5,6 +5,7 @@ var typing = false;
 var lastTypingTime;
 var INPUT_INTERVAL = 500; //ms
 
+/*************Update typing status*****************/
 $('input[name=message]').on('input', function() {
   typingStatus();
 });
@@ -39,7 +40,7 @@ socket.on('stop typing', function(userName) {
   var html = Mustache.render(template, {Info});
   $('#typingInfo').html(html);
 });
-
+/**************AutoScroll**********************/
 function scrollToBottom() {
   // Selectors
   var messages = $('#messages');
@@ -55,7 +56,7 @@ function scrollToBottom() {
     messages.scrollTop(scrollHeight);
   }
 }
-
+// on connect
 socket.on('connect', function() {
   var userId = localStorage.getItem('user_id');
   var userToken = localStorage.getItem('user_token');
@@ -80,10 +81,6 @@ socket.on('connect', function() {
   userRoom = roomId;
 });
 
-socket.on('disconnect', function() {
-  console.log('Disconnect!');
-});
-
 socket.on('updateUserList', function(users) {
   var ol = $('<ol></ol>');
 
@@ -92,7 +89,7 @@ socket.on('updateUserList', function(users) {
   });
   $('#users').html(ol);
 });
-
+// handle new message
 socket.on('newMessage', function(message) {
   var formattedTime = moment(message.createdAt).format('h:mm a');
   var template = $('#message-template').html();
@@ -139,7 +136,7 @@ $('#message-form').on('submit', function(e) {
     messageTextBox.val('');
   });
 });
-
+// handle location
 var locationButton = $('#send-location');
 locationButton.on('click', function(e) {
   if (!navigator.geolocation) {
@@ -158,4 +155,8 @@ locationButton.on('click', function(e) {
     locationButton.removeAttr('disabled').text('Send Locatin');
     alert('Unable to fetch location.')
   });
+});
+
+socket.on('disconnect', function() {
+  console.log('Disconnect!');
 });
