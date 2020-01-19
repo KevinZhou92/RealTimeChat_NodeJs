@@ -69,7 +69,9 @@ sign_up_form.on('submit', function(e) {
 // signin use existing user infomation
 sign_in_form.on('submit', function(e) {
   e.preventDefault();
-
+  console.log($('input[name=email]').val());
+  console.log($('input[name=password]').val());
+  
   var userEmail = $('input[name=email]').val();
   var userPassword = $('input[name=password]').val();
 
