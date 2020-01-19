@@ -69,9 +69,7 @@ sign_up_form.on('submit', function(e) {
 // signin use existing user infomation
 sign_in_form.on('submit', function(e) {
   e.preventDefault();
-  console.log($('input[name=email]').val());
-  console.log($('input[name=password]').val());
-  
+
   var userEmail = $('input[name=email]').val();
   var userPassword = $('input[name=password]').val();
 
@@ -83,8 +81,13 @@ sign_in_form.on('submit', function(e) {
       return alert(err);
     }
     if (user) {
+      console.log(1);
       ls_sign_in(user, token);
+
+      console.log(2);
       showRoomForm(user.name);
+
+      console.log(3);
       sign_in_form.addClass('invisible');
       alert('Welcome ' + user.name + ' you can start chatting now!');
     }
