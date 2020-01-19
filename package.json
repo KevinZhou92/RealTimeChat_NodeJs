@@ -17,7 +17,7 @@
     "bcryptjs": "^2.4.3",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.1.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.13",
     "moment": "^2.19.2",
     "mongoose": "^4.13.1",
     "socket.io": "^2.0.4",
