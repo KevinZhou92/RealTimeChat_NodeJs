@@ -1,8 +1,8 @@
-[{
-  id: '/adf14',
-  name: 'Andrew',
-  roomId: 'The Office Fans'
-}]
+// [{
+//   id: '/adf14',
+//   name: 'Andrew',
+//   roomId: 'The Office Fans'
+// }]
 
 // addUser(id, name, roomId)
 // removerUser(id)
@@ -28,11 +28,11 @@ class UsersList {
   }
   removeUserByName(name, roomId) {
     var users = this.getUserList(roomId);
-    var user = this.users.filter((user) => user.dsiplayName === name)[0];
+    var user = this.users.filter((user) => user.displayName === name)[0];
+
     if (user) {
       this.users = this.users.filter((user) => user.displayName !== name);
     }
-
     return user;
   }
   getUser(id) {

@@ -81,13 +81,8 @@ sign_in_form.on('submit', function(e) {
       return alert(err);
     }
     if (user) {
-      console.log(1);
       ls_sign_in(user, token);
-
-      console.log(2);
       showRoomForm(user.name);
-
-      console.log(3);
       sign_in_form.addClass('invisible');
       alert('Welcome ' + user.name + ' you can start chatting now!');
     }

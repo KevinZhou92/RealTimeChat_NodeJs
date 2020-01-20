@@ -1,35 +1,39 @@
 const expect = require('expect');
 
-const {Users} = require('./users');
+const {UsersList} = require('./usersList.js');
 
 describe('Users', () => {
   var users;
 
   beforeEach(() => {
-    users = new Users();
+    users = new UsersList();
     users.users = [{
       id: '1',
       name: 'Mike',
-      room: 'Node Course'
+      displayName: 'Mike',
+      roomId: 'Node Course'
     }, {
       id: '2',
       name: 'Jen',
-      room: 'React Course'
+      displayName: 'Jen',
+      roomId: 'React Course'
     }, {
       id: '3',
       name: 'Julie',
-      room: 'Node Course'
+      displayName: 'Julie',
+      roomId: 'Node Course'
     }];
   });
 
   it('should add new user', () => {
-    var users = new Users();
+    var users = new UsersList();
     var user = {
       id: '123',
-      name: 'Andrew',
-      room: 'The Office Fans'
+      displayName: 'Andrew',
+      userName: 'Andrew',
+      roomId: 'The Office Fans'
     };
-    var resUser = users.addUser(user.id, user.name, user.room);
+    var resUser = users.addUser(user.id, user.displayName, user.roomId, user.userName);
 
     expect(users.users).toEqual([user]);
   });
@@ -37,7 +41,7 @@ describe('Users', () => {
   it('should remove a user', () => {
     var userId = '1';
     var user = users.removeUser(userId);
-
+    
     expect(user.id).toBe(userId);
     expect(users.users.length).toBe(2);
   });
@@ -78,7 +82,7 @@ describe('Users', () => {
 
   it('should remove user by name', () => {
     var removedUser = users.removeUserByName('Jen', 'React Course');
-    
+
     expect(removedUser.name).toBe('Jen');
     expect(removedUser.id).toBe('2');
     expect(users.users.length).toBe(2);

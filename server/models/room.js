@@ -29,6 +29,8 @@ var roomSchema = new mongoose.Schema({
       required: true
     }
   }]
+},{
+  usePushEach: true
 });
 roomSchema.statics.getRoomList = function() {
   var Room = this;
